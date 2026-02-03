@@ -1,20 +1,40 @@
 pipeline {
     agent any
+
     stages {
         stage('Checkout') {
             steps {
+                // Pulls the code from the GitHub repository configured in the Jenkins job
                 checkout scm
             }
         }
+
         stage('Build & Test') {
             steps {
+                // Ensure the Gradle wrapper is executable in the Unix environment
                 sh 'chmod +x gradlew'
+                // Executes clean and test to generate JaCoCo reports
                 sh './gradlew clean test'
             }
         }
+
+        stage('SonarQube Analysis') {
+            steps {
+                // 'SonarQube' must match the name in Manage Jenkins > System configuration
+                withSonarQubeEnv('SonarQube') {
+                    // Executes the SonarQube scan using the JaCoCo coverage report
+                    sh './gradlew sonar \
+                        -Dsonar.projectKey=bits-ls3-2023vz70077 \
+                        -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml'
+                }
+            }
+        }
+
         stage('Archive Artifact') {
             steps {
+                // Generates the JAR file
                 sh './gradlew jar'
+                // Archives the JAR for download from the Jenkins UI
                 archiveArtifacts artifacts: 'build/libs/*.jar', fingerprint: true
             }
         }
