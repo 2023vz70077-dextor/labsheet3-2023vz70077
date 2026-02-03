@@ -1,0 +1,6 @@
+projectKey=bits-ls3-2023vz70077
+serverUrl=http://localhost:9000
+serverVersion=9.9.3.79811
+dashboardUrl=http://localhost:9000/dashboard?id=bits-ls3-2023vz70077
+ceTaskId=AZwkfEodZnDm4eqRg_zF
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AZwkfEodZnDm4eqRg_zF

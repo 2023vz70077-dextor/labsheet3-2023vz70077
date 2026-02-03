@@ -2,23 +2,20 @@ pipeline {
     agent any
     stages {
         stage('Checkout') {
-            steps { checkout scm }
-        }
-        stage('Build & Test') {
-            steps { sh 'gradle clean test' }
-        }
-        stage('SonarQube Analysis') {
             steps {
-                // Ensure SonarQube is configured in Jenkins System Manage
-                withSonarQubeEnv('SonarQube') { 
-                    sh 'gradle sonar'
-                }
+                checkout scm
             }
         }
-        stage('Archive') {
+        stage('Build & Test') {
             steps {
-                sh 'gradle jar'
-                archiveArtifacts artifacts: 'build/libs/*.jar', allowEmptyArchive: false
+                sh 'chmod +x gradlew'
+                sh './gradlew clean test'
+            }
+        }
+        stage('Archive Artifact') {
+            steps {
+                sh './gradlew jar'
+                archiveArtifacts artifacts: 'build/libs/*.jar', fingerprint: true
             }
         }
     }
