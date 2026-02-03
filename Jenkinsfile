@@ -42,19 +42,17 @@ pipeline {
 
     steps {
 
-        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-
             sh "./gradlew sonar \
 
                 -Dsonar.host.url=http://localhost:9000 \
 
-                -Dsonar.token=${SONAR_TOKEN} \
+                -Dsonar.token= squ_74d4908fceff6bac16b1c89474a7302f1217c011 \
 
                 -Dsonar.projectKey=bits-ls3-2023vz70077 \
 
                 -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml"
 
-        }
+        
 
     }
 
